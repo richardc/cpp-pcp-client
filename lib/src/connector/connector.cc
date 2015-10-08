@@ -7,9 +7,9 @@
 #include <leatherman/logging/logging.hpp>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/chrono/chrono.hpp>
 
 #include <cstdio>
-#include <chrono>
 
 // TODO(ale): disable assert() once we're confident with the code...
 // To disable assert()
@@ -85,7 +85,7 @@ Connector::~Connector() {
     }
 
     {
-        std::lock_guard<std::mutex> the_lock { mutex_ };
+        boost::lock_guard<boost::mutex> the_lock { mutex_ };
         is_destructing_ = true;
         cond_var_.notify_one();
     }
@@ -405,11 +405,11 @@ void Connector::startMonitorTask(int max_connect_attempts) {
     assert(connection_ptr_ != nullptr);
 
     while (true) {
-        std::unique_lock<std::mutex> the_lock { mutex_ };
-        auto now = std::chrono::system_clock::now();
+        boost::unique_lock<boost::mutex> the_lock { mutex_ };
+        auto now = boost::chrono::system_clock::now();
 
         cond_var_.wait_until(the_lock,
-                             now + std::chrono::seconds(CONNECTION_CHECK_S));
+                             now + boost::chrono::seconds(CONNECTION_CHECK_S));
 
         if (is_destructing_) {
             // The dtor has been invoked

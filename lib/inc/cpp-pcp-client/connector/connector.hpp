@@ -12,9 +12,10 @@
 #include <memory>
 #include <string>
 #include <map>
-#include <thread>  // mutex
-#include <condition_variable>
 #include <atomic>
+
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/condition_variable.hpp>
 
 namespace PCPClient {
 
@@ -170,8 +171,8 @@ class Connector {
     bool is_monitoring_;
 
     /// To manage the monitoring task
-    std::mutex mutex_;
-    std::condition_variable cond_var_;
+    boost::mutex mutex_;
+    boost::condition_variable cond_var_;
 
     /// Flag; set to true if the dtor has been called
     bool is_destructing_;
