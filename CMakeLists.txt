@@ -26,8 +26,9 @@ include_directories(${CMAKE_BINARY_DIR}/generated)
 # Set RPATH if not installing to a system library directory
 list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" INSTALL_IS_SYSTEM_DIR)
 if ("${INSTALL_IS_SYSTEM_DIR}" STREQUAL "-1")
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    #set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif()
+cmake_policy(SET CMP0042 OLD)
 
 # Set compiler flags
 include(cflags)
